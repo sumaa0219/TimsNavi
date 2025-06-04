@@ -206,10 +206,21 @@ const TrainDisplayPage = () => {
             </table>
           </div>
           {coords && (
-            <div className="text-xs text-gray-300 px-2 py-1">
-              緯度: {coords.lat.toFixed(6)} / 経度: {coords.lng.toFixed(6)}
-              <br />
-              {location && <span>現在地: {location}</span>}
+            <div className="flex-grow flex flex-col space-y-1 w-20 items-end p-2">
+              <div className="bg-gray-700 h-5 w-60 flex items-start justify-start">
+                <span className="text-xs text-gray-300 px-2 py-1 text-right">
+                  {coords
+                    ? `緯度: ${coords.lat.toFixed(
+                        6
+                      )} / 経度: ${coords.lng.toFixed(6)}`
+                    : "緯度: - / 経度: -"}
+                </span>
+              </div>
+              <div className="bg-gray-700 h-5 w-60 flex items-start justify-start">
+                <span className="text-xs text-gray-300 px-2 py-1 text-right">
+                  {location && <span>現在地: {location}</span>}
+                </span>
+              </div>
             </div>
           )}
           <div className="flex items-center space-x-2 h-15 bg-neutral-800 px-3">
