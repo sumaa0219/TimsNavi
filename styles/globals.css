@@ -14,12 +14,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #262626;
+    --background: #141212;
     --foreground: #ededed;
   }
 }
 
 body {
   font-family: sans-serif; /* 適宜変更 */
-  background-color: #262626; /* ダークグレーの背景 */
+  background-color: #404040; /* ダークグレーの背景 */
 }

@@ -44,19 +44,6 @@ const TrainDisplayPage = () => {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        () => {
-          // 許可された場合は何もしない
-        },
-        () => {
-          // 拒否された場合も何もしない（必要ならアラート等）
-        }
-      );
-    }
-  }, []);
-
   // GPSから速度と座標を取得
   useEffect(() => {
     let watchId: number | null = null;
@@ -201,7 +188,7 @@ const TrainDisplayPage = () => {
           </div>
 
           {/* Content Area Below Top Bar */}
-          <div className="flex flex-grow p-11 items-stretch space-x-5">
+          <div className="flex flex-grow p-9 items-stretch space-x-5">
             {" "}
             {/* items-stretch for vertical alignment of children */}
             {/* Left Black Panel */}
