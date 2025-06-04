@@ -64,9 +64,6 @@ const TrainDisplayPage = () => {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           });
-          console.log(
-            `緯度: ${pos.coords.latitude}, 経度: ${pos.coords.longitude}, 速度: ${pos.coords.speed}`
-          );
         },
         () => {
           setSpeed("0");
@@ -96,18 +93,69 @@ const TrainDisplayPage = () => {
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&accept-language=ja`
         );
         const data = await res.json();
-        console.log("Location data:", data);
-        // display_nameから都道府県・市区町村を抽出
-        // 例: "弁本屋酒店, 福音寮道, 桜上水五丁目, 桜上水, 世田谷区, 東京都, 156-0045, 日本"
         let pref = "";
         let city = "";
+
         if (data.display_name) {
           const parts = data.display_name
             .split(",")
             .map((s: string) => s.trim());
-          // 都道府県を探す
-          pref = parts[5] || "";
-          // 市区町村を探す
+
+          // 47都道府県リスト
+          const prefs = [
+            "北海道",
+            "青森県",
+            "岩手県",
+            "宮城県",
+            "秋田県",
+            "山形県",
+            "福島県",
+            "茨城県",
+            "栃木県",
+            "群馬県",
+            "埼玉県",
+            "千葉県",
+            "東京都",
+            "神奈川県",
+            "新潟県",
+            "富山県",
+            "石川県",
+            "福井県",
+            "山梨県",
+            "長野県",
+            "岐阜県",
+            "静岡県",
+            "愛知県",
+            "三重県",
+            "滋賀県",
+            "京都府",
+            "大阪府",
+            "兵庫県",
+            "奈良県",
+            "和歌山県",
+            "鳥取県",
+            "島根県",
+            "岡山県",
+            "広島県",
+            "山口県",
+            "徳島県",
+            "香川県",
+            "愛媛県",
+            "高知県",
+            "福岡県",
+            "佐賀県",
+            "長崎県",
+            "熊本県",
+            "大分県",
+            "宮崎県",
+            "鹿児島県",
+            "沖縄県",
+          ];
+
+          // 都道府県をリストから厳密に探す
+          pref = parts.find((p: string) => prefs.includes(p)) || "";
+
+          // 市区町村を探す（従来通り）
           city = parts.find((p: string) => /(市|区|町|村)$/.test(p)) || "";
         }
         setLocation(`${pref}${city ? " " + city : ""}`);
