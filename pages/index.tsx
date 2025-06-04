@@ -24,6 +24,8 @@ const TrainDisplayPage = () => {
     null
   );
 
+  const [location, setLocation] = useState<string>("");
+
   // ボタン押下時のハンドラ
   const handleBooby = () => {
     if (boobyAudioRef.current) {
@@ -83,6 +85,38 @@ const TrainDisplayPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!coords) {
+      setLocation("");
+      return;
+    }
+    const fetchLocation = async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&accept-language=ja`
+        );
+        const data = await res.json();
+        // display_nameから都道府県・市区町村を抽出
+        // 例: "弁本屋酒店, 福音寮道, 桜上水五丁目, 桜上水, 世田谷区, 東京都, 156-0045, 日本"
+        let pref = "";
+        let city = "";
+        if (data.display_name) {
+          const parts = data.display_name
+            .split(",")
+            .map((s: string) => s.trim());
+          // 都道府県を探す
+          pref = parts[5] || "";
+          // 市区町村を探す
+          city = parts.find((p: string) => /(市|区|町|村)$/.test(p)) || "";
+        }
+        setLocation(`${pref}${city ? " " + city : ""}`);
+      } catch (e) {
+        setLocation("取得失敗");
+      }
+    };
+    fetchLocation();
+  }, [coords]);
+
   // ...表示したい場所に追加...
 
   return (
@@ -125,6 +159,8 @@ const TrainDisplayPage = () => {
           {coords && (
             <div className="text-xs text-gray-300 px-2 py-1">
               緯度: {coords.lat.toFixed(6)} / 経度: {coords.lng.toFixed(6)}
+              <br />
+              {location && <span>現在地: {location}</span>}
             </div>
           )}
           <div className="flex items-center space-x-2 h-15 bg-neutral-800 px-3">
