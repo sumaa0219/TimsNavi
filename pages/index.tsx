@@ -96,6 +96,7 @@ const TrainDisplayPage = () => {
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&accept-language=ja`
         );
         const data = await res.json();
+        console.log("Location data:", data);
         // display_nameから都道府県・市区町村を抽出
         // 例: "弁本屋酒店, 福音寮道, 桜上水五丁目, 桜上水, 世田谷区, 東京都, 156-0045, 日本"
         let pref = "";
