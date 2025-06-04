@@ -111,7 +111,7 @@ const TrainDisplayPage = () => {
         }
         setLocation(`${pref}${city ? " " + city : ""}`);
       } catch (e) {
-        setLocation("取得失敗");
+        setLocation(`${e}取得失敗`);
       }
     };
     fetchLocation();
