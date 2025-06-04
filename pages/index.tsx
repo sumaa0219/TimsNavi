@@ -207,7 +207,7 @@ const TrainDisplayPage = () => {
           </div>
           {coords && (
             <div className="flex-grow flex flex-col space-y-1 w-20 items-end p-2">
-              <div className="bg-gray-700 h-6 w-65 flex items-end justify-end">
+              <div className="bg-gray-700 h-6 w-65 flex items-start justify-start">
                 <span className="text-xs text-gray-300 px-2 py-1 text-left font-bold">
                   {coords
                     ? `緯度: ${coords.lat.toFixed(
@@ -216,7 +216,7 @@ const TrainDisplayPage = () => {
                     : "緯度: - / 経度: -"}
                 </span>
               </div>
-              <div className="bg-gray-700 h-6 w-65 flex items-end justify-end">
+              <div className="bg-gray-700 h-6 w-65 flex items-start justify-start">
                 <span className="text-xs text-gray-300 px-2 py-1 text-left font-bold">
                   {location && <span>現在地: {location}</span>}
                 </span>
