@@ -157,7 +157,6 @@ const TrainDisplayPage = () => {
 
           // 市区町村を探す（従来通り）
           city = parts.find((p: string) => /(市|区|町|村)$/.test(p)) || "";
-          console.log("pref:", pref, "city:", city);
         }
         setLocation(`${pref}${city ? " " + city : ""}`);
       } catch (e) {
