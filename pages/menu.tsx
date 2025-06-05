@@ -28,7 +28,7 @@ const TrainDisplayPage = () => {
 
   const buttonClasses =
     "w-full h-full bg-[#6082A6] text-white rounded-lg cursor-pointer flex items-center justify-center";
-  const leftButtonBaseClasses = "w-[200px] h-[100px] text-2xl bg-blue-600"; // 左側のボタン固有のサイズとフォント
+  const leftButtonBaseClasses = "w-[200px] h-[200px] text-2xl bg-blue-600"; // 左側のボタン固有のサイズとフォント
   const rightButtonBaseClasses = "w-[150px] h-[70px] text-lg ml-3 bg-blue-600"; // 右側のボタン固有のサイズとフォント
 
   // ボタン押下時のハンドラ
@@ -291,7 +291,7 @@ const TrainDisplayPage = () => {
           {/* Content Area Below Top Bar */}
           <div className="flex gap-12 p-0 bg-neutral-600  items-start">
             {/* 左側のボタン配置 */}
-            <div className="flex flex-col gap-5 w-60 p-6">
+            <div className="flex flex-col gap-2 w-60 h-38 p-6">
               <button className={`${buttonClasses} ${leftButtonBaseClasses}`}>
                 運転情報
               </button>
@@ -302,7 +302,7 @@ const TrainDisplayPage = () => {
 
             {/* 右側のボタン配置 (table) */}
             <table
-              className="border-separate"
+              className="border-separate h-36 "
               style={{ borderSpacing: "10px" }}
             >
               <tbody>
@@ -396,37 +396,6 @@ const TrainDisplayPage = () => {
                       className={`${buttonClasses} ${rightButtonBaseClasses}`}
                     >
                       ボタン 12
-                    </button>
-                  </td>
-                </tr>
-                {/* 4行目 */}
-                <tr>
-                  <td>
-                    <button
-                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
-                    >
-                      ボタン 13
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
-                    >
-                      ボタン 14
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
-                    >
-                      ボタン 15
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
-                    >
-                      ボタン 16
                     </button>
                   </td>
                 </tr>
