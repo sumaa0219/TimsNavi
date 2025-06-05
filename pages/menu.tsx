@@ -302,7 +302,7 @@ const TrainDisplayPage = () => {
 
             {/* 右側のボタン配置 (table) */}
             <table
-              className="border-separate h-36 w-180 mr-4"
+              className="border-separate h-38 w-180 mr-4"
               style={{ borderSpacing: "10px" }}
             >
               <tbody>
