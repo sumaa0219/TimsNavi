@@ -29,7 +29,7 @@ const TrainDisplayPage = () => {
   const buttonClasses =
     "w-full h-full bg-[#6082A6] text-white rounded-lg cursor-pointer flex items-center justify-center";
   const leftButtonBaseClasses = "w-[200px] h-[200px] text-2xl bg-blue-600"; // 左側のボタン固有のサイズとフォント
-  const rightButtonBaseClasses = "w-[150px] h-[70px] text-lg ml-3 bg-blue-600"; // 右側のボタン固有のサイズとフォント
+  const rightButtonBaseClasses = "w-[170px] h-[70px] text-lg ml-3 bg-blue-600"; // 右側のボタン固有のサイズとフォント
 
   // ボタン押下時のハンドラ
   const handleBooby = () => {
@@ -291,7 +291,7 @@ const TrainDisplayPage = () => {
           {/* Content Area Below Top Bar */}
           <div className="flex gap-12 p-0 bg-neutral-600  items-start">
             {/* 左側のボタン配置 */}
-            <div className="flex flex-col gap-2 w-60 h-38 p-6">
+            <div className="flex flex-col gap-2 w-60 h-38 p-2 ml-6">
               <button className={`${buttonClasses} ${leftButtonBaseClasses}`}>
                 運転情報
               </button>
@@ -302,7 +302,7 @@ const TrainDisplayPage = () => {
 
             {/* 右側のボタン配置 (table) */}
             <table
-              className="border-separate h-36 "
+              className="border-separate h-36 w-180 mr-4"
               style={{ borderSpacing: "10px" }}
             >
               <tbody>
