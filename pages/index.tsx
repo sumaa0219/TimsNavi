@@ -26,6 +26,21 @@ const TrainDisplayPage = () => {
 
   const [location, setLocation] = useState<string>("");
 
+  const [distance, setDistance] = useState<number>(0);
+
+  // 速度からキロ程（距離）を算出
+  useEffect(() => {
+    // 速度はkm/h、1秒ごとに加算
+    const interval = setInterval(() => {
+      const speedNum = parseFloat(speed); // speedは文字列
+      if (!isNaN(speedNum)) {
+        // 1秒ごとに進む距離[km] = (km/h) / 3600
+        setDistance((prev) => prev + speedNum / 3600);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [speed]);
+
   // ボタン押下時のハンドラ
   const handleBooby = () => {
     if (boobyAudioRef.current) {
@@ -199,7 +214,7 @@ const TrainDisplayPage = () => {
                 </tr>
                 <tr>
                   <td className="text-gray-400 pr-1">キロ程</td>
-                  <td className="font-semibold">100k</td>
+                  <td className="font-semibold">{distance.toFixed(2)}k</td>
                   <td className="font-semibold text-left">m</td>
                 </tr>
               </tbody>
