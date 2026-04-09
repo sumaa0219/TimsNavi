@@ -1,10 +1,16 @@
 // pages/index.tsx
 import React, { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const TrainDisplayPage = () => {
-  // 現在時刻のstate
-  // 現在時刻のstate
+  const buttonClasses =
+    "w-full h-full bg-[#6082A6] text-white rounded-lg cursor-pointer flex items-center justify-center";
+  const leftButtonBaseClasses = "w-[200px] h-[200px] text-2xl bg-blue-600"; // 左側のボタン固有のサイズとフォント
+  const rightButtonBaseClasses = "w-[170px] h-[70px] text-lg ml-3 bg-blue-600"; // 右側のボタン固有のサイズとフォント
+
   const [now, setNow] = useState<string>(() => {
     const d = new Date();
     const hh = d.getHours().toString().padStart(2, "0");
@@ -16,6 +22,8 @@ const TrainDisplayPage = () => {
   // 速度のstate
   const [speed, setSpeed] = useState<string>("0");
 
+  const router = useRouter(); // 追加
+
   // ブービー音のAudio要素を用意
   const boobyAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -26,18 +34,20 @@ const TrainDisplayPage = () => {
 
   const [location, setLocation] = useState<string>("");
 
-  const buttonClasses =
-    "w-full h-full bg-[#6082A6] text-white rounded-lg cursor-pointer flex items-center justify-center";
-  const leftButtonBaseClasses = "w-[200px] h-[200px] text-2xl bg-blue-600"; // 左側のボタン固有のサイズとフォント
-  const rightButtonBaseClasses = "w-[170px] h-[70px] text-lg ml-3 bg-blue-600"; // 右側のボタン固有のサイズとフォント
+  const [distance, setDistance] = useState<number>(0);
 
-  // ボタン押下時のハンドラ
-  const handleBooby = () => {
-    if (boobyAudioRef.current) {
-      boobyAudioRef.current.currentTime = 0;
-      boobyAudioRef.current.play();
-    }
-  };
+  // 速度からキロ程（距離）を算出
+  useEffect(() => {
+    // 速度はkm/h、1秒ごとに加算
+    const interval = setInterval(() => {
+      const speedNum = parseFloat(speed); // speedは文字列
+      if (!isNaN(speedNum)) {
+        // 1秒ごとに進む距離[km] = (km/h) / 3600
+        setDistance((prev) => prev + speedNum / 3600);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [speed]);
 
   // 1秒ごとに時刻を更新
   useEffect(() => {
@@ -171,6 +181,19 @@ const TrainDisplayPage = () => {
     fetchLocation();
   }, [coords]);
 
+  const handleBooby = () => {
+    if (boobyAudioRef.current) {
+      boobyAudioRef.current.currentTime = 0;
+      boobyAudioRef.current.play();
+    }
+  };
+
+  // ブービー音再生後にページ遷移
+  const handleBoobyAndRoute = (path: string) => {
+    handleBooby();
+    router.push(path);
+  };
+
   // ...表示したい場所に追加...
 
   return (
@@ -188,52 +211,16 @@ const TrainDisplayPage = () => {
 
       <div className="bg-neutral-800 text-white min-h-screen p-1 flex flex-col font-sans">
         {/* Header Section */}
-        <header className="flex justify-between items-center mb-2 h-15 min-h-0 bg-black p-0 border-b border-gray-700">
-          <div className="flex flex-col justify-center h-full">
-            <table className="w-full text-right text-[15px]">
-              <tbody>
-                <tr>
-                  <td className="text-gray-400 pr-1">時刻</td>
-                  <td className="font-semibold">{now}</td>
-                  <td className="font-semibold text-left">秒</td>
-                </tr>
-                <tr>
-                  <td className="text-gray-400 pr-1">速度</td>
-                  <td className="font-semibold">{speed}k</td>
-                  <td className="font-semibold text-left">m/h</td>
-                </tr>
-                <tr>
-                  <td className="text-gray-400 pr-1">キロ程</td>
-                  <td className="font-semibold">100k</td>
-                  <td className="font-semibold text-left">m</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          {coords && (
-            <div className="flex-grow flex flex-col space-y-1 w-20 items-end p-2">
-              <div className="bg-gray-700 h-6 w-65 flex items-start justify-start">
-                <span className="text-xs text-gray-300 px-2 py-1 text-left font-bold">
-                  {coords
-                    ? `緯度: ${coords.lat.toFixed(
-                        6
-                      )} / 経度: ${coords.lng.toFixed(6)}`
-                    : "緯度: - / 経度: -"}
-                </span>
-              </div>
-              <div className="bg-gray-700 h-6 w-65 flex items-start justify-start">
-                <span className="text-xs text-gray-300 px-2 py-1 text-left font-bold">
-                  {location && <span>現在地: {location}</span>}
-                </span>
-              </div>
-            </div>
-          )}
-          <div className="flex items-center space-x-2 h-15 bg-neutral-800 px-3">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white h-12 font-semibold py-1 px-3 rounded-md text-xs">
-              初期選択
-            </button>
-          </div>
-        </header>
+        <Header
+          now={now}
+          speed={speed}
+          distance={distance}
+          coords={coords}
+          location={location}
+          onInitSelect={() => {
+            /* 初期選択ボタンの処理 */
+          }}
+        />
 
         {/* <hr className="border-gray-700 p-0.5" /> */}
 
@@ -311,6 +298,7 @@ const TrainDisplayPage = () => {
                   <td>
                     <button
                       className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                      onClick={() => handleBoobyAndRoute("/setRoute")}
                     >
                       案内設定
                     </button>
@@ -409,105 +397,7 @@ const TrainDisplayPage = () => {
         {/* <hr className="border-gray-700 mt-2 mb-2" /> */}
 
         {/* Footer Section */}
-        <footer className="flex items-center justify-between mt-2 bg-black h-20">
-          <div className="flex space-x-2">
-            <button
-              className="bg-blue-600 w-24 h-12 rounded-md flex flex-col items-center justify-center"
-              onClick={handleBooby}
-            >
-              <span className="text-white text-sm leading-tight">運転士</span>
-              <span className="text-white text-xs leading-tight">メニュー</span>
-            </button>
-            <button
-              className="bg-blue-600 w-24 h-12 rounded-md flex flex-col items-center justify-center"
-              onClick={handleBooby}
-            >
-              <span className="text-white text-sm leading-tight">高速</span>
-              <span className="text-white text-sm leading-tight">切替</span>
-            </button>
-            <button
-              className="bg-blue-600 w-24 h-12 rounded-md flex flex-col items-center justify-center"
-              onClick={handleBooby}
-            >
-              <span className="text-white text-sm leading-tight">戻し</span>
-            </button>
-            <button
-              className="bg-blue-600 w-24 h-12 rounded-md flex flex-col items-center justify-center"
-              onClick={handleBooby}
-            >
-              <span className="text-white text-sm leading-tight">送り</span>
-            </button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="flex-grow flex flex-col space-y-1 w-48">
-              <div className="bg-gray-700 h-5 flex items-start justify-start">
-                <span className="bg-green-400 text-black text-[15px]   leading-tight">
-                  オンライン
-                </span>
-              </div>
-              <div className="bg-gray-700 h-5 "></div>
-            </div>
-            <button
-              className="bg-blue-600 w-10 h-12 rounded-md flex items-center justify-center"
-              onClick={handleBooby}
-            >
-              {/* 音量アイコン */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5L6 9H2v6h4l5 4V5z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15.54 8.46a5 5 0 010 7.07"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19.07 4.93a9 9 0 010 12.73"
-                />
-              </svg>
-            </button>
-            <button
-              className="bg-blue-600 w-10 h-12 rounded-md flex items-center justify-center"
-              onClick={handleBooby}
-            >
-              {/* 明るさアイコン */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="5"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  fill="none"
-                />
-                <path
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-                />
-              </svg>
-            </button>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );

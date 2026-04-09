@@ -1,13 +1,16 @@
 // pages/index.tsx
 import React, { useEffect, useState, useRef } from "react";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const TrainDisplayPage = () => {
-  // 現在時刻のstate
-  // 現在時刻のstate
+  const buttonClasses =
+    "w-full h-full bg-[#6082A6] text-white rounded-lg cursor-pointer flex items-center justify-center";
+  const leftButtonBaseClasses = "w-[200px] h-[200px] text-2xl bg-blue-600"; // 左側のボタン固有のサイズとフォント
+  const rightButtonBaseClasses = "w-[170px] h-[70px] text-lg ml-3 bg-blue-600"; // 右側のボタン固有のサイズとフォント
+
   const [now, setNow] = useState<string>(() => {
     const d = new Date();
     const hh = d.getHours().toString().padStart(2, "0");
@@ -178,6 +181,19 @@ const TrainDisplayPage = () => {
     fetchLocation();
   }, [coords]);
 
+  const handleBooby = () => {
+    if (boobyAudioRef.current) {
+      boobyAudioRef.current.currentTime = 0;
+      boobyAudioRef.current.play();
+    }
+  };
+
+  // ブービー音再生後にページ遷移
+  const handleBoobyAndRoute = (path: string) => {
+    handleBooby();
+    router.push(path);
+  };
+
   // ...表示したい場所に追加...
 
   return (
@@ -260,50 +276,125 @@ const TrainDisplayPage = () => {
           </div>
 
           {/* Content Area Below Top Bar */}
-          <div className="flex flex-grow p-9 items-stretch space-x-5">
-            {" "}
-            {/* items-stretch for vertical alignment of children */}
-            {/* Left Black Panel */}
-            {/* <div className="w-[120px] bg-black rounded-sm"> {/* Adjusted width, it will stretch vertically. Added slight rounding if desired, remove if strictly rectangular. */}
-            {/* This panel is empty in the image */}
-            {/* </div> */}
-            {/* Route Visualization (Centered in its allocated space) */}
-            <div className="flex-grow flex items-center justify-center space-x-4">
-              <div className="bg-neutral-600 border border-neutral-400 text-white text-4xl font-semibold py-5 px-10 rounded-sm">
-                府中
-              </div>
-              <div className="text-white text-4xl font-light">→</div>
-              <div className="bg-neutral-600 border border-neutral-400 text-white text-4xl font-semibold py-5 px-10 rounded-sm">
-                桜上水
-              </div>
+          <div className="flex gap-12 p-0 bg-neutral-600  items-start">
+            {/* 左側のボタン配置 */}
+            <div className="flex flex-col gap-2 w-60 h-38 p-2 ml-6">
+              <button className={`${buttonClasses} ${leftButtonBaseClasses}`}>
+                運転情報
+              </button>
+              <button className={`${buttonClasses} ${leftButtonBaseClasses}`}>
+                運番設定
+              </button>
             </div>
-            {/* Train Type/Destination (to the right) */}
-            <div className="text-left space-y-2 flex flex-col justify-center ml-4">
-              <div>
-                <span className="text-yellow-300 text-3xl font-bold py-2 px-4 rounded-md whitespace-nowrap">
-                  急行
-                </span>
-              </div>
-              <div>
-                <span className="text-yellow-300 text-3xl font-bold py-2 px-4 rounded-md whitespace-nowrap">
-                  <span className="text-yellow-300 text-3xl font-bold py-2 px-1 rounded-md whitespace-nowrap">
-                    高幡不動
-                  </span>
-                  <span className="text-white text-3xl font-bold py-2 px-4 rounded-md whitespace-nowrap justify-end">
-                    行
-                  </span>
-                </span>
-              </div>
-            </div>
+
+            {/* 右側のボタン配置 (table) */}
+            <table
+              className="border-separate h-38 w-180 mr-4"
+              style={{ borderSpacing: "10px" }}
+            >
+              <tbody>
+                {/* 1行目 */}
+                <tr>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                      onClick={() => handleBoobyAndRoute("/setRoute")}
+                    >
+                      案内設定
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 2
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 3
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 4
+                    </button>
+                  </td>
+                </tr>
+                {/* 2行目 */}
+                <tr>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 5
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 6
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 7
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 8
+                    </button>
+                  </td>
+                </tr>
+                {/* 3行目 */}
+                <tr>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 9
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 10
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 11
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={`${buttonClasses} ${rightButtonBaseClasses}`}
+                    >
+                      ボタン 12
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           {/* Bottom Bar */}
         </main>
 
-        {/* <hr className="border-gray-700 mt-2 mb-2" /> */}
-
         {/* Footer Section */}
-
         <Footer />
       </div>
     </>
